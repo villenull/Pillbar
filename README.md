@@ -19,7 +19,7 @@ Forked from [fab's Pillbar](https://github.com/fillmefab4/Pillbar) (MIT). The pi
 ## Install
 
 ```bash
-omarchy plugin add https://github.com/<you>/pillcycle.git --enable
+omarchy plugin add https://github.com/villenull/Pillbar.git --enable
 ```
 
 Restart the shell if the bar does not switch over immediately:
