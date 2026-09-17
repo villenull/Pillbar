@@ -648,6 +648,13 @@ Item {
       })
     }
   }
+
+  function toggleTransparency() {
+    // Stock gesture contract: double-click empty bar space. Owns the
+    // 3-state cycle; the old transparent-flag toggle is gone on this bar.
+    root.cycleBarMode()
+  }
+
   // Mode-aware transparency: pills forces the transparent strip with opaque
   // capsules and theme foreground; otherwise the live transparent flag
   // (stock behavior, incl. wallpaper-contrast foreground) decides.
