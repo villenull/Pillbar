@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "id": "villenull.pillcycle",
+  "name": "Pillcycle Bar",
+  "version": "1.0.0",
+  "author": "villenull",
+  "description": "Pill bar fork: double-click empty bar space cycles solid strip -> transparent strip -> pills. Layout, widgets, and plugins are untouched.",
+  "kinds": [
+    "bar"
+  ],
+  "entryPoints": {
+    "bar": "Bar.qml"
+  }
+}
