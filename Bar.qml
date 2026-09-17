@@ -630,36 +630,33 @@ Item {
 
     Util.execDetached(command)
   }
-  // Double-click target: solid -> transparent -> pills. Writes bar.mode to
-  // shell.json (persisted, hot-reloads); the visible change also applies
-  // immediately via barMode so every monitor switches without waiting for
-  // the config round-trip.
+  // Double-click target: solid -> transparent -> pills. Writes bar.mode plus
+  // the matching bar.transparent flag (persisted, hot-reloads); the visible
+  // change also applies immediately via barMode so every monitor switches
+  // without waiting for the config round-trip. Keeping the flag in step
+  // means solid always arrives opaque and transparent always arrives clear.
   function cycleBarMode() {
     var next = BarModel.nextBarMode(root.barMode)
+    var flag = next === "transparent"
     root.barMode = next
+    root.requestedTransparentConfig = flag
     if (root.shell && typeof root.shell.mutateShellConfig === "function") {
       root.shell.mutateShellConfig(function(config) {
         if (!Util.isPlainObject(config.bar)) config.bar = {}
         config.bar.mode = next
+        config.bar.transparent = flag
       })
     }
   }
-
-  function toggleTransparency() {
-    // Stock gesture contract: double-click empty bar space. Now owns the
-  // 3-state cycle; the old transparent-flag toggle is gone on this bar.
-    root.cycleBarMode()
-  }
-
-  // Mode-aware transparency: solid honors the shell.json transparent flag;
-  // transparent forces the stock transparent strip; pills force the
-  // transparent strip with opaque capsules and theme foreground.
+  // Mode-aware transparency: pills forces the transparent strip with opaque
+  // capsules and theme foreground; otherwise the live transparent flag
+  // (stock behavior, incl. wallpaper-contrast foreground) decides.
   function applyModeTransparency() {
-    if (root.barMode === "transparent") root.setRequestedTransparency(true)
-    else if (root.barMode === "solid") root.setRequestedTransparency(root.requestedTransparentConfig === true)
-    else root.setRequestedTransparency(false)
+    if (root.barMode === "pills") root.setRequestedTransparency(false)
+    else root.setRequestedTransparency(root.requestedTransparentConfig === true)
   }
   onBarModeChanged: applyModeTransparency()
+  onRequestedTransparentConfigChanged: applyModeTransparency()
 
   function rawLayoutSection(config, region) {
     if (!Util.isPlainObject(config.bar)) config.bar = {}
